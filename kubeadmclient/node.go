@@ -2,7 +2,6 @@ package kubeadmclient
 
 import (
 	"fmt"
-	"log"
 	"strings"
 	"time"
 
@@ -29,7 +28,6 @@ func (n *Node) determineOS() osType.OsType {
 	client := n.sshClient()
 	out, err := client.Collect("uname -a")
 	if err != nil {
-		log.Println(string(out))
 		return nil
 	}
 
@@ -65,5 +63,6 @@ func (n *Node) sshClientWithTimeout(duration time.Duration) *sshclient.SSHConnec
 		KeyLocation: n.privateKeyLocation,
 		VerboseMode: n.verboseMode,
 		Timeout:     duration,
+		ClientID:    n.clientID,
 	}
 }

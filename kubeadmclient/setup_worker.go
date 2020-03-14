@@ -19,23 +19,25 @@ func (k *Kubeadm) setupWorkers(joinCommand string) error {
 	errc := make(chan *WorkerError, 1)
 
 	if len(k.WorkerNodes) > 0 {
-		for _, workerNode := range k.WorkerNodes {
+		for i, workerNode := range k.WorkerNodes {
 
 			workerWG.Add(1)
 
-			go func(workerWG *sync.WaitGroup, node *WorkerNode) {
+			go func(workerWG *sync.WaitGroup, node *WorkerNode, i int) {
 				if err := node.Install(joinCommand); err != nil {
 					errc <- &WorkerError{
 						worker: node,
 						err:    err,
 					}
 				}
+
+				if i == len(k.WorkerNodes)-1 {
+					close(errc)
+				}
 				workerWG.Done()
-			}(&workerWG, workerNode)
+			}(&workerWG, workerNode, i)
 		}
 	}
-
-	workerWG.Wait()
 
 	for errWorker := range errc {
 		if errWorker.err != nil {
@@ -50,6 +52,8 @@ func (k *Kubeadm) setupWorkers(joinCommand string) error {
 			}
 		}
 	}
+
+	workerWG.Wait()
 
 	return nil
 }

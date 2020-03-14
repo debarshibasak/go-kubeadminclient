@@ -1,6 +1,9 @@
 package kubeadmclient
 
-import "errors"
+import (
+	"errors"
+	"log"
+)
 
 var (
 	errMasterNotSpecified = errors.New("master node not specified")
@@ -23,7 +26,12 @@ func (k *Kubeadm) AddNode() error {
 	}
 
 	if err := k.setupWorkers(joinCommand); err != nil {
-		return err
+		log.Println(err)
+		if !k.SkipAddWorkerFailure {
+			return err
+		}
+
+		return nil
 	}
 
 	return err

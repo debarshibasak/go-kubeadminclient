@@ -13,10 +13,12 @@ func TestError(t *testing.T) {
 	errc := make(chan error, 100)
 
 	go func() {
-		for {
+		for i := 0; i < 10; i++ {
 			time.Sleep(1 * time.Second)
 			errc <- errors.New("data" + time.Now().String())
 		}
+
+		close(errc)
 	}()
 
 	for c := range errc {

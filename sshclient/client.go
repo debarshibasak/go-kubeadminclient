@@ -74,7 +74,7 @@ func (sh *SSHConnection) Collect(cmd string) (string, error) {
 		return "", err
 	}
 
-	fmt.Println(cmd)
+	fmt.Println("[node: " + sh.IP + "] " + cmd)
 	writeCloudInfoOut, err := session.Output(fmt.Sprintf("sh -c '%v'", cmd))
 	if err != nil {
 		return "", err
@@ -104,7 +104,7 @@ func (sh *SSHConnection) ScpFrom(source string, destination string) error {
 	}
 
 	if sh.VerboseMode {
-		fmt.Println("[client_id: " + sh.ClientID + "]" + string(out))
+		fmt.Println("[node: " + sh.IP + "] " + string(out))
 	}
 
 	return err
@@ -121,7 +121,7 @@ func (sh *SSHConnection) ScpTo(source string, destination string) error {
 	}
 
 	if sh.VerboseMode {
-		fmt.Println("[client_id: " + sh.ClientID + "]" + string(out))
+		fmt.Println("[node: " + sh.IP + "] " + string(out))
 	}
 
 	return err
@@ -183,7 +183,7 @@ func (sh *SSHConnection) Run(cmd []string) error {
 			return err
 		}
 
-		fmt.Println(ln)
+		fmt.Println("[node: " + sh.IP + "] " + ln)
 
 		writeCloudInfoOut, err := session.Output(fmt.Sprintf("sh -c '%v'", ln))
 		if err != nil {
@@ -193,7 +193,7 @@ func (sh *SSHConnection) Run(cmd []string) error {
 		}
 
 		if sh.VerboseMode {
-			fmt.Println("[client_id: " + sh.ClientID + "]" + string(writeCloudInfoOut))
+			fmt.Println("[node: " + sh.IP + "] " + string(writeCloudInfoOut))
 		}
 
 		session.Close()
