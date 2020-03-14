@@ -30,23 +30,19 @@ func NewMasterNode(username string,
 	}
 }
 
-func (n *MasterNode) ChangePermissionKubeconfig() error {
-	return n.Run("sudo chown $USER:$USER /etc/kubernetes/admin.conf")
+func (n *MasterNode) changePermissionKubeconfig() error {
+	return n.run("sudo chown $USER:$USER /etc/kubernetes/admin.conf")
 }
 
-func (n *MasterNode) TaintAsMaster() error {
-	return n.Run("KUBECONFIG=/etc/kubernetes/admin.conf kubectl taint nodes --all node-role.kubernetes.io/master-")
+func (n *MasterNode) taintAsMaster() error {
+	return n.run("KUBECONFIG=/etc/kubernetes/admin.conf kubectl taint nodes --all node-role.kubernetes.io/master-")
 }
 
-func (n *MasterNode) ApplyFile(file string) error {
-	return n.Run("KUBECONFIG=/etc/kubernetes/admin.conf kubectl apply -f " + file)
+func (n *MasterNode) applyFile(file string) error {
+	return n.run("KUBECONFIG=/etc/kubernetes/admin.conf kubectl apply -f " + file)
 }
 
-func (n *MasterNode) ApplyFlannel() error {
-	return n.Run("KUBECONFIG=/etc/kubernetes/admin.conf kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/2140ac876ef134e0ed5af15c65e414cf26827915/Documentation/kube-flannel.yml")
-}
-
-func (n *MasterNode) GetToken() (string, error) {
+func (n *MasterNode) getToken() (string, error) {
 
 	sh := sshclient.SSHConnection{
 		Username:    n.username,
@@ -69,15 +65,15 @@ func (n *MasterNode) GetToken() (string, error) {
 	return c["token"].(string), nil
 }
 
-func (n *MasterNode) Run(shell string) error {
+func (n *MasterNode) run(shell string) error {
 	return n.sshClient().Run([]string{shell})
 }
 
-func (n *MasterNode) GetKubeConfig() (string, error) {
+func (n *MasterNode) getKubeConfig() (string, error) {
 	return n.sshClient().Collect("sudo cat /etc/kubernetes/admin.conf")
 }
 
-func (n *MasterNode) GetJoinCommand() (string, error) {
+func (n *MasterNode) getJoinCommand() (string, error) {
 	return n.sshClient().Collect("sudo kubeadm token create --print-join-command")
 }
 
@@ -108,7 +104,7 @@ func (n *MasterNode) installAndFetchCommand(kubeadm Kubeadm, vip string) (string
 	return getControlPlaneJoinCommand(out), nil
 }
 
-func (n *MasterNode) Install(kubeadm Kubeadm, availability *HighAvailability) error {
+func (n *MasterNode) install(kubeadm Kubeadm, availability *highAvailability) error {
 
 	osType := n.determineOS()
 

@@ -3,6 +3,8 @@ package examples
 import (
 	"log"
 
+	"github.com/debarshibasak/go-kubeadmclient/kubeadmclient/networking"
+
 	"github.com/debarshibasak/go-kubeadmclient/kubeadmclient"
 )
 
@@ -33,7 +35,7 @@ func CreateClusterExampleNonHA() {
 				"/Users//.ssh/id_rsa",
 			),
 		},
-		Netorking:   kubeadmclient.Flannel,
+		Netorking:   networking.Flannel,
 		VerboseMode: false,
 	}
 

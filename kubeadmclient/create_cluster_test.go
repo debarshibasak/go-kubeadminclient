@@ -18,7 +18,7 @@ func TestKubeadm_CreateCluster(t *testing.T) {
 		MasterNodes: []*kubeadmclient.MasterNode{
 			kubeadmclient.NewMasterNode(
 				"ubuntu",
-				"192.168.64.33",
+				"192.168.64.40",
 				"/Users/debarshibasak/.ssh/id_rsa",
 			),
 		},
@@ -26,21 +26,18 @@ func TestKubeadm_CreateCluster(t *testing.T) {
 		WorkerNodes: []*kubeadmclient.WorkerNode{
 			kubeadmclient.NewWorkerNode(
 				"ubuntu",
-				"192.168.64.34",
+				"192.168.64.41",
 				"/Users/debarshibasak/.ssh/id_rsa",
 			),
 			kubeadmclient.NewWorkerNode(
 				"ubuntu",
-				"192.168.64.35",
+				"192.168.64.42",
 				"/Users/debarshibasak/.ssh/id_rsa",
 			),
 		},
 
-		SkipAddWorkerFailure: false,
-
-		ApplyFiles: []string{
-			"https://raw.githubusercontent.com/coreos/flannel/2140ac876ef134e0ed5af15c65e414cf26827915/Documentation/kube-flannel.yml",
-		},
+		SkipWorkerFailure: false,
+		Netorking:         kubeadmclient.Flannel,
 	}
 
 	err := k.CreateCluster()

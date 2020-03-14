@@ -25,7 +25,22 @@ func NewWorkerNode(username string,
 	}
 }
 
-func (n *WorkerNode) Install(joinCommand string) error {
+func (n *WorkerNode) reset() error {
+
+	osType := n.determineOS()
+
+	if osType == nil {
+		return errors.New("could not determine ostype, may be it could not ssh into it, or does not support the os")
+	}
+
+	if err := n.sshClientWithTimeout(30 * time.Minute).Run([]string{"sudo kubeadm reset"}); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (n *WorkerNode) install(joinCommand string) error {
 
 	osType := n.determineOS()
 

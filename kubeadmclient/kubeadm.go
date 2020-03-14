@@ -1,6 +1,9 @@
 package kubeadmclient
 
-import "github.com/pkg/errors"
+import (
+	"github.com/debarshibasak/go-kubeadmclient/kubeadmclient/networking"
+	"github.com/pkg/errors"
+)
 
 //Reference - https://godoc.org/k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta1
 
@@ -12,61 +15,22 @@ const (
 	NONHA   Setup = 2
 )
 
-type Networking struct {
-	Manifests string
-	Name      string
-}
-
-func LookupNetworking(cni string) *Networking {
-	switch cni {
-	case "flannel":
-		return Flannel
-	case "canal":
-		return Canal
-	case "Calico":
-		return Calico
-	default:
-		return nil
-	}
-}
-
-var (
-	Flannel = &Networking{
-		Manifests: "https://raw.githubusercontent.com/coreos/flannel/2140ac876ef134e0ed5af15c65e414cf26827915/Documentation/kube-flannel.yml",
-		Name:      "flannel",
-	}
-
-	Canal = &Networking{
-		Manifests: "https://raw.githubusercontent.com/coreos/flannel/2140ac876ef134e0ed5af15c65e414cf26827915/Documentation/kube-flannel.yml",
-		Name:      "canal",
-	}
-
-	Calico = &Networking{
-		Manifests: "https://raw.githubusercontent.com/coreos/flannel/2140ac876ef134e0ed5af15c65e414cf26827915/Documentation/kube-flannel.yml",
-		Name:      "calico",
-	}
-)
-
 type Kubeadm struct {
-	ClusterName          string
-	MasterNodes          []*MasterNode
-	WorkerNodes          []*WorkerNode
-	HaProxyNode          *HaProxyNode
-	ApplyFiles           []string
-	PodNetwork           string
-	ServiceNetwork       string
-	DNSDomain            string
-	VerboseMode          bool
-	Netorking            *Networking
-	SkipAddWorkerFailure bool
+	ClusterName       string
+	MasterNodes       []*MasterNode
+	WorkerNodes       []*WorkerNode
+	HaProxyNode       *HaProxyNode
+	ApplyFiles        []string
+	PodNetwork        string
+	ServiceNetwork    string
+	DNSDomain         string
+	VerboseMode       bool
+	Netorking         *networking.Networking
+	SkipWorkerFailure bool
 }
 
 func (k *Kubeadm) GetKubeConfig() (string, error) {
-	return k.MasterNodes[0].GetKubeConfig()
-}
-
-func (k *Kubeadm) ApplyTaint() (string, error) {
-	return k.MasterNodes[0].GetKubeConfig()
+	return k.MasterNodes[0].getKubeConfig()
 }
 
 func (k *Kubeadm) determineSetup() Setup {

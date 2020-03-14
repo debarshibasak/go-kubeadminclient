@@ -28,7 +28,7 @@ func TestKubeadm_AddNode(t *testing.T) {
 				"/Users/debarshibasak/.ssh/id_rsa",
 			),
 		},
-		SkipAddWorkerFailure: true,
+		SkipWorkerFailure: true,
 	}
 
 	err := k.AddNode()
