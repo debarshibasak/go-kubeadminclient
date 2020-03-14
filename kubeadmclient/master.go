@@ -46,7 +46,7 @@ func (n *MasterNode) ApplyFlannel() error {
 
 func (n *MasterNode) GetToken() (string, error) {
 
-	sh := sshclient.SshConnection{
+	sh := sshclient.SSHConnection{
 		Username:    n.username,
 		IP:          n.ipOrHost,
 		KeyLocation: n.privateKeyLocation,

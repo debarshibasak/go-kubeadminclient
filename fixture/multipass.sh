@@ -3,7 +3,7 @@ do
     multipass delete -p $vm
 done
 
-multipass launch --cpus 2
+multipass launch --cpus 1
 
 for vm in `multipass list | awk '{print $1}'`
 do
