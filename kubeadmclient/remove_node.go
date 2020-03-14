@@ -9,6 +9,7 @@ import (
 
 var (
 	errNoWorkerForRemoveNode = errors.New("no worker information is set while removing node")
+	errNoMasterForRemoveNode = errors.New("no master information is set while removing node")
 )
 
 // RemoveNode will take the incoming Kubeadm struct.
@@ -22,23 +23,49 @@ func (k *Kubeadm) RemoveNode() error {
 		return errNoWorkerForRemoveNode
 	}
 
-	var workerWG sync.WaitGroup
-	errc := make(chan *WorkerError, 1)
+	if len(k.MasterNodes) == 0 {
+		return errNoMasterForRemoveNode
+	}
 
-	for _, worker := range k.WorkerNodes {
+	var workerWG sync.WaitGroup
+	errc := make(chan *workerError, 1)
+	var hostnames []string
+
+	for i, worker := range k.WorkerNodes {
 
 		workerWG.Add(1)
 
-		go func(wg *sync.WaitGroup, worker *WorkerNode) {
-			if err := worker.Reset(); err != nil {
-				errc <- &WorkerError{
+		go func(wg *sync.WaitGroup, worker *WorkerNode, i int) {
+			hostname, err := worker.drainAndReset()
+			if err != nil {
+				errc <- &workerError{
 					worker: worker,
 					err:    err,
 				}
 			}
 
+			if hostname != "" {
+				hostnames = append(hostnames, hostname)
+			}
+
+			if i == len(k.WorkerNodes)-1 {
+				close(errc)
+			}
 			wg.Done()
-		}(&workerWG, worker)
+		}(&workerWG, worker, i)
+	}
+
+	workerWG.Wait()
+
+	e := k.workerErrorManager(errc)
+	if e != nil {
+		return e
+	}
+
+	for _, hostname := range hostnames {
+		if err := k.MasterNodes[0].ctlCommand("kubectl delete node " + hostname); err != nil {
+			log.Println(err)
+		}
 	}
 
 	log.Println("time taken = " + time.Since(startTime).String())

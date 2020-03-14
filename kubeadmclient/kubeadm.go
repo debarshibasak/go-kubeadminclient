@@ -1,6 +1,8 @@
 package kubeadmclient
 
 import (
+	"log"
+
 	"github.com/debarshibasak/go-kubeadmclient/kubeadmclient/networking"
 	"github.com/pkg/errors"
 )
@@ -67,5 +69,21 @@ func (k *Kubeadm) validateAndUpdateDefault() error {
 	}
 
 	return nil
+}
 
+func (k *Kubeadm) workerErrorManager(errc chan *workerError) error {
+	for errWorker := range errc {
+		if errWorker.err != nil {
+			if errWorker.err == errWhileAddWorker {
+				errWrk := errors.New("worker=" + errWorker.worker.ipOrHost + "err=" + errWorker.err.Error())
+				if !k.SkipWorkerFailure {
+					return errWrk
+				}
+				log.Println(errWrk.Error() + " however, skipping this error")
+			} else {
+				return errWorker.err
+			}
+		}
+	}
+	return nil
 }

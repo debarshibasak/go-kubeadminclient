@@ -48,7 +48,7 @@ func main(){
 			 kubeadmclient.NewWorkerNode("ubuntu", "192.168.1.11", "/home/debarshi/.ssh/id_rsa"),
 			 kubeadmclient.NewWorkerNode("ubuntu", "192.168.1.12", "/home/debarshi/.ssh/id_rsa"),
 		 },
-	      Netorking:   kubeadmclient.Flannel,
+	      Netorking:   networking.Flannel,
           VerboseMode: false,
 	 }
 
@@ -88,6 +88,7 @@ please create a github issue.
 - Add Support for offline installation
 - Add Support for remove node
 - Add support for delete cluster
+- Smart use MaxSession from ssh_config to buffer adding nodes
 
 #### Supporting this project
 - I need funding for testing this project

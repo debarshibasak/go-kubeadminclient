@@ -16,10 +16,7 @@ type MasterNode struct {
 	*Node
 }
 
-func NewMasterNode(username string,
-	ipOrHost string,
-	privateKeyLocation string) *MasterNode {
-
+func NewMasterNode(username string, ipOrHost string, privateKeyLocation string) *MasterNode {
 	return &MasterNode{
 		&Node{
 			username:           username,
@@ -35,7 +32,7 @@ func (n *MasterNode) changePermissionKubeconfig() error {
 }
 
 func (n *MasterNode) taintAsMaster() error {
-	return n.run("KUBECONFIG=/etc/kubernetes/admin.conf kubectl taint nodes --all node-role.kubernetes.io/master-")
+	return n.run("KUBECONFIG=/etc/kubernetes/admin.conf kubectl taint nodes --selector=kubernetes.io/hostname=`hostname` node-role.kubernetes.io/master-")
 }
 
 func (n *MasterNode) applyFile(file string) error {
@@ -67,6 +64,10 @@ func (n *MasterNode) getToken() (string, error) {
 
 func (n *MasterNode) run(shell string) error {
 	return n.sshClient().Run([]string{shell})
+}
+
+func (n *MasterNode) ctlCommand(cmd string) error {
+	return n.run("KUBECONFIG=/etc/kubernetes/admin.conf " + cmd)
 }
 
 func (n *MasterNode) getKubeConfig() (string, error) {
