@@ -2,7 +2,6 @@ package kubeadmclient
 
 import (
 	"errors"
-	"log"
 )
 
 func (k *Kubeadm) DeleteCluster() error {
@@ -41,46 +40,15 @@ func (k *Kubeadm) DeleteCluster() error {
 			}
 		}
 	} else {
-		if len(nodelist) > 0 {
-			var errC = make(chan error, len(nodelist))
-			for i, node := range nodelist {
-				go func(node string, index int) {
-					errC <- k.MasterNodes[0].deleteNode(node)
-
-					if index == len(nodelist)-1 {
-						close(errC)
-					}
-				}(node, i)
-			}
-
-			for e := range errC {
-				if e != nil {
-					log.Println("error - " + e.Error())
-					if !k.SkipWorkerFailure {
-						return e
-					}
-				}
-			}
+		if err := k.deleteNodes(nodelist); err != nil {
+			return err
 		}
 	}
 
 	if len(masterNodeList) > 0 {
-		var errMasterDeletion = make(chan error, len(masterNodeList))
 
-		for i, node := range masterNodeList {
-
-			go func(node string, index int) {
-				errMasterDeletion <- k.MasterNodes[0].deleteNode(node)
-				if index == len(masterNodeList)-1 {
-					close(errMasterDeletion)
-				}
-			}(node, i)
-		}
-
-		for e := range errMasterDeletion {
-			if e != nil {
-				return e
-			}
+		if err := k.deleteNodes(masterNodeList); err != nil {
+			return err
 		}
 
 		if k.ResetOnDeleteCluster {
@@ -91,7 +59,6 @@ func (k *Kubeadm) DeleteCluster() error {
 				}
 			}
 		}
-
 	}
 
 	return nil

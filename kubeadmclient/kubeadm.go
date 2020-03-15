@@ -48,6 +48,33 @@ func (k *Kubeadm) determineSetup() Setup {
 	return UNKNOWN
 }
 
+func (k *Kubeadm) deleteNodes(nodelist []string) error {
+
+	if len(nodelist) > 0 {
+		var errC = make(chan error, len(nodelist))
+		for i, node := range nodelist {
+			go func(node string, index int) {
+				errC <- k.MasterNodes[0].deleteNode(node)
+
+				if index == len(nodelist)-1 {
+					close(errC)
+				}
+			}(node, i)
+		}
+
+		for e := range errC {
+			if e != nil {
+				log.Println("error - " + e.Error())
+				if !k.SkipWorkerFailure {
+					return e
+				}
+			}
+		}
+	}
+
+	return nil
+}
+
 func (k *Kubeadm) validateAndUpdateDefault() error {
 
 	if len(k.MasterNodes) == 0 {
