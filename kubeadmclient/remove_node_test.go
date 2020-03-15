@@ -14,24 +14,14 @@ func TestKubeadm_RemoveNode(t *testing.T) {
 		MasterNodes: []*kubeadmclient.MasterNode{
 			kubeadmclient.NewMasterNode(
 				"ubuntu",
-				"192.168.64.47",
+				"192.168.64.26",
 				"/Users/debarshibasak/.ssh/id_rsa",
 			),
 		},
 		WorkerNodes: []*kubeadmclient.WorkerNode{
 			kubeadmclient.NewWorkerNode(
 				"ubuntu",
-				"192.168.64.49",
-				"/Users/debarshibasak/.ssh/id_rsa",
-			),
-			kubeadmclient.NewWorkerNode(
-				"ubuntu",
-				"192.168.64.50",
-				"/Users/debarshibasak/.ssh/id_rsa",
-			),
-			kubeadmclient.NewWorkerNode(
-				"ubuntu",
-				"192.168.64.51",
+				"192.168.64.29",
 				"/Users/debarshibasak/.ssh/id_rsa",
 			),
 		},

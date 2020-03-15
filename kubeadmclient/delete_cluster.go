@@ -40,25 +40,25 @@ func (k *Kubeadm) DeleteCluster() error {
 				return err
 			}
 		}
-	}
+	} else {
+		if len(nodelist) > 0 {
+			var errC = make(chan error, len(nodelist))
+			for i, node := range nodelist {
+				go func(node string, index int) {
+					errC <- k.MasterNodes[0].deleteNode(node)
 
-	if len(nodelist) > 0 {
-		var errC = make(chan error, len(nodelist))
-		for i, node := range nodelist {
-			go func(node string, index int) {
-				errC <- k.MasterNodes[0].deleteNode(node)
+					if index == len(nodelist)-1 {
+						close(errC)
+					}
+				}(node, i)
+			}
 
-				if index == len(nodelist)-1 {
-					close(errC)
-				}
-			}(node, i)
-		}
-
-		for e := range errC {
-			if e != nil {
-				log.Println("error - " + e.Error())
-				if !k.SkipWorkerFailure {
-					return e
+			for e := range errC {
+				if e != nil {
+					log.Println("error - " + e.Error())
+					if !k.SkipWorkerFailure {
+						return e
+					}
 				}
 			}
 		}

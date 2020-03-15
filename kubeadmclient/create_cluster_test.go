@@ -9,8 +9,43 @@ import (
 	"github.com/debarshibasak/go-kubeadmclient/kubeadmclient"
 )
 
-func TestKubeadm_CreateCluster2(t *testing.T) {
+func TestKubeadm_CreateClusterHA(t *testing.T) {
+	k := kubeadmclient.Kubeadm{
 
+		ClusterName: "testcluster",
+
+		MasterNodes: []*kubeadmclient.MasterNode{
+			kubeadmclient.NewMasterNode(
+				"ubuntu",
+				"192.168.64.26",
+				"/Users/debarshibasak/.ssh/id_rsa",
+			),
+			kubeadmclient.NewMasterNode(
+				"ubuntu",
+				"192.168.64.29",
+				"/Users/debarshibasak/.ssh/id_rsa",
+			),
+		},
+		WorkerNodes: []*kubeadmclient.WorkerNode{
+			kubeadmclient.NewWorkerNode(
+				"ubuntu",
+				"192.168.64.27",
+				"/Users/debarshibasak/.ssh/id_rsa",
+			),
+			kubeadmclient.NewWorkerNode(
+				"ubuntu",
+				"192.168.64.28",
+				"/Users/debarshibasak/.ssh/id_rsa",
+			),
+		},
+		Netorking:   networking.Flannel,
+		VerboseMode: false,
+	}
+
+	err := k.CreateCluster()
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func TestKubeadm_CreateCluster(t *testing.T) {
@@ -22,19 +57,19 @@ func TestKubeadm_CreateCluster(t *testing.T) {
 		MasterNodes: []*kubeadmclient.MasterNode{
 			kubeadmclient.NewMasterNode(
 				"ubuntu",
-				"192.168.64.23",
+				"192.168.64.26",
 				"/Users/debarshibasak/.ssh/id_rsa",
 			),
 		},
 		WorkerNodes: []*kubeadmclient.WorkerNode{
 			kubeadmclient.NewWorkerNode(
 				"ubuntu",
-				"192.168.64.24",
+				"192.168.64.27",
 				"/Users/debarshibasak/.ssh/id_rsa",
 			),
 			kubeadmclient.NewWorkerNode(
 				"ubuntu",
-				"192.168.64.25",
+				"192.168.64.28",
 				"/Users/debarshibasak/.ssh/id_rsa",
 			),
 		},

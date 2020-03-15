@@ -14,19 +14,19 @@ func TestKubeadm_DeleteCluster(t *testing.T) {
 		MasterNodes: []*kubeadmclient.MasterNode{
 			kubeadmclient.NewMasterNode(
 				"ubuntu",
-				"192.168.64.23",
+				"192.168.64.26",
 				"/Users/debarshibasak/.ssh/id_rsa",
 			),
 		},
 		WorkerNodes: []*kubeadmclient.WorkerNode{
 			kubeadmclient.NewWorkerNode(
 				"ubuntu",
-				"192.168.64.24",
+				"192.168.64.27",
 				"/Users/debarshibasak/.ssh/id_rsa",
 			),
 			kubeadmclient.NewWorkerNode(
 				"ubuntu",
-				"192.168.64.25",
+				"192.168.64.28",
 				"/Users/debarshibasak/.ssh/id_rsa",
 			),
 		},

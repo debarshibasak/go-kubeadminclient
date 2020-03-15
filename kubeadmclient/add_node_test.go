@@ -11,34 +11,14 @@ func TestKubeadm_AddNode(t *testing.T) {
 		MasterNodes: []*kubeadmclient.MasterNode{
 			kubeadmclient.NewMasterNode(
 				"ubuntu",
-				"192.168.64.47",
+				"192.168.64.26",
 				"/Users/debarshibasak/.ssh/id_rsa",
 			),
 		},
 		WorkerNodes: []*kubeadmclient.WorkerNode{
 			kubeadmclient.NewWorkerNode(
 				"ubuntu",
-				"192.168.64.51",
-				"/Users/debarshibasak/.ssh/id_rsa",
-			),
-			kubeadmclient.NewWorkerNode(
-				"ubuntu",
-				"192.168.64.52",
-				"/Users/debarshibasak/.ssh/id_rsa",
-			),
-			kubeadmclient.NewWorkerNode(
-				"ubuntu",
-				"192.168.64.50",
-				"/Users/debarshibasak/.ssh/id_rsa",
-			),
-			kubeadmclient.NewWorkerNode(
-				"ubuntu",
-				"192.168.64.48",
-				"/Users/debarshibasak/.ssh/id_rsa",
-			),
-			kubeadmclient.NewWorkerNode(
-				"ubuntu",
-				"192.168.64.49",
+				"192.168.64.29",
 				"/Users/debarshibasak/.ssh/id_rsa",
 			),
 		},
