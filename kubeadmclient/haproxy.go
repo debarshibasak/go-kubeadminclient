@@ -51,7 +51,10 @@ backend k8s-api
 
 func (n *HaProxyNode) install(masterIPs []string) error {
 
-	osType := n.determineOS()
+	osType, err := n.determineOS()
+	if err != nil {
+		return err
+	}
 
 	if err := n.sshClientWithTimeout(20 * time.Minute).Run(osType.InstallDocker()); err != nil {
 		return err

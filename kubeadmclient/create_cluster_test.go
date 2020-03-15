@@ -16,30 +16,30 @@ func TestKubeadm_CreateCluster2(t *testing.T) {
 func TestKubeadm_CreateCluster(t *testing.T) {
 
 	k := kubeadmclient.Kubeadm{
-		ClusterName: "test",
+
+		ClusterName: "testcluster",
+
 		MasterNodes: []*kubeadmclient.MasterNode{
 			kubeadmclient.NewMasterNode(
 				"ubuntu",
-				"192.168.64.47",
-				"USER_HOME/.ssh/id_rsa",
+				"192.168.64.7",
+				"/Users/debarshibasak/.ssh/id_rsa",
 			),
 		},
-
 		WorkerNodes: []*kubeadmclient.WorkerNode{
 			kubeadmclient.NewWorkerNode(
 				"ubuntu",
-				"192.168.64.48",
-				"USER_HOME/.ssh/id_rsa",
+				"192.168.64.8",
+				"/Users/debarshibasak/.ssh/id_rsa",
 			),
 			kubeadmclient.NewWorkerNode(
 				"ubuntu",
-				"192.168.64.49",
-				"USER_HOME/.ssh/id_rsa",
+				"192.168.64.9",
+				"/Users/debarshibasak/.ssh/id_rsa",
 			),
 		},
-
-		SkipWorkerFailure: false,
-		Netorking:         networking.Flannel,
+		Netorking:   networking.Flannel,
+		VerboseMode: false,
 	}
 
 	err := k.CreateCluster()

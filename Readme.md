@@ -89,10 +89,12 @@ please create a github issue.
 
 #### Roadmap
 - Testing this orchestration on centos, redhat
-- Add Support for offline installation
 - Add Support for remove node
 - Add support for delete cluster
 - Smart use MaxSession from ssh_config to buffer adding nodes
+- Add docker daemon options like insecure registries etc.
+- Add option to install docker-ee
+- Add Support for offline installation
 
 #### Supporting this project
 - I need funding for testing this project

@@ -3,8 +3,9 @@ package kubeadmclient
 import (
 	"log"
 
+	"errors"
+
 	"github.com/debarshibasak/go-kubeadmclient/kubeadmclient/networking"
-	"github.com/pkg/errors"
 )
 
 //Reference - https://godoc.org/k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta1
