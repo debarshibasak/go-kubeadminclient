@@ -89,7 +89,5 @@ func (n *WorkerNode) install(joinCommand string) error {
 		return err
 	}
 
-	if err = n.setWorkerLabel(); err != nil {
-		return err
-	}
+	return n.setWorkerLabel()
 }

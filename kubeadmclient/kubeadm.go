@@ -19,17 +19,18 @@ const (
 )
 
 type Kubeadm struct {
-	ClusterName       string
-	MasterNodes       []*MasterNode
-	WorkerNodes       []*WorkerNode
-	HaProxyNode       *HaProxyNode
-	ApplyFiles        []string
-	PodNetwork        string
-	ServiceNetwork    string
-	DNSDomain         string
-	VerboseMode       bool
-	Netorking         *networking.Networking
-	SkipWorkerFailure bool
+	ClusterName          string
+	MasterNodes          []*MasterNode
+	WorkerNodes          []*WorkerNode
+	HaProxyNode          *HaProxyNode
+	ApplyFiles           []string
+	PodNetwork           string
+	ServiceNetwork       string
+	DNSDomain            string
+	VerboseMode          bool
+	Netorking            *networking.Networking
+	SkipWorkerFailure    bool
+	ResetOnDeleteCluster bool
 }
 
 func (k *Kubeadm) GetKubeConfig() (string, error) {

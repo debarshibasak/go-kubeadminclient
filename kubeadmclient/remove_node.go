@@ -63,7 +63,7 @@ func (k *Kubeadm) RemoveNode() error {
 	}
 
 	for _, hostname := range hostnames {
-		if err := k.MasterNodes[0].ctlCommand("kubectl delete node " + hostname); err != nil {
+		if err := k.MasterNodes[0].deleteNode(hostname); err != nil {
 			log.Println(err)
 		}
 	}

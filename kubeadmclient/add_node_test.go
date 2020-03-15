@@ -7,7 +7,6 @@ import (
 )
 
 func TestKubeadm_AddNode(t *testing.T) {
-	//Create clusters with only master machine
 	k := kubeadmclient.Kubeadm{
 		MasterNodes: []*kubeadmclient.MasterNode{
 			kubeadmclient.NewMasterNode(
