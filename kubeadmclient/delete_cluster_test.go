@@ -15,7 +15,6 @@ func TestKubeadm_DeleteCluster(t *testing.T) {
 				"/Users/debarshibasak/.ssh/id_rsa",
 			),
 		},
-		SkipWorkerFailure: false,
 	}
 
 	err := k.DeleteCluster()

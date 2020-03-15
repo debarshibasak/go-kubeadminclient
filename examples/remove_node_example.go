@@ -9,7 +9,6 @@ import (
 // This is an example for removing node from an existing cluster.
 // You have to specify the one of the masters and the nodes you want to remove.
 func RemoveNodeExample() {
-
 	k := kubeadmclient.Kubeadm{
 		ClusterName: "test",
 		MasterNodes: []*kubeadmclient.MasterNode{
