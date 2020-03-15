@@ -22,19 +22,19 @@ func TestKubeadm_CreateCluster(t *testing.T) {
 		MasterNodes: []*kubeadmclient.MasterNode{
 			kubeadmclient.NewMasterNode(
 				"ubuntu",
-				"192.168.64.7",
+				"192.168.64.23",
 				"/Users/debarshibasak/.ssh/id_rsa",
 			),
 		},
 		WorkerNodes: []*kubeadmclient.WorkerNode{
 			kubeadmclient.NewWorkerNode(
 				"ubuntu",
-				"192.168.64.8",
+				"192.168.64.24",
 				"/Users/debarshibasak/.ssh/id_rsa",
 			),
 			kubeadmclient.NewWorkerNode(
 				"ubuntu",
-				"192.168.64.9",
+				"192.168.64.25",
 				"/Users/debarshibasak/.ssh/id_rsa",
 			),
 		},

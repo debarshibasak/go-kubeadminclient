@@ -35,23 +35,22 @@ func (k *Kubeadm) DeleteCluster() error {
 
 	if k.ResetOnDeleteCluster {
 		err := k.RemoveNode()
-		if err != nil {
-			return err
+		if !k.SkipWorkerFailure {
+			if err != nil {
+				return err
+			}
 		}
 	}
 
 	if len(nodelist) > 0 {
-		var errC = make(chan error, 1)
+		var errC = make(chan error, len(nodelist))
 		for i, node := range nodelist {
 			go func(node string, index int) {
-				if err := k.MasterNodes[0].deleteNode(node); err != nil {
-					errC <- err
-				}
+				errC <- k.MasterNodes[0].deleteNode(node)
 
 				if index == len(nodelist)-1 {
 					close(errC)
 				}
-
 			}(node, i)
 		}
 
@@ -66,20 +65,15 @@ func (k *Kubeadm) DeleteCluster() error {
 	}
 
 	if len(masterNodeList) > 0 {
-		var errMasterDeletion = make(chan error, 1)
-		defer close(errMasterDeletion)
+		var errMasterDeletion = make(chan error, len(masterNodeList))
 
 		for i, node := range masterNodeList {
-			go func(node string, index int) {
-				if err := k.MasterNodes[0].deleteNode(node); err != nil {
-					errMasterDeletion <- err
-				}
 
-				log.Println(index)
+			go func(node string, index int) {
+				errMasterDeletion <- k.MasterNodes[0].deleteNode(node)
 				if index == len(masterNodeList)-1 {
 					close(errMasterDeletion)
 				}
-
 			}(node, i)
 		}
 
@@ -88,6 +82,16 @@ func (k *Kubeadm) DeleteCluster() error {
 				return e
 			}
 		}
+
+		if k.ResetOnDeleteCluster {
+			//TODO parallelize
+			for _, master := range k.MasterNodes {
+				if err := master.reset(); err != nil {
+					return err
+				}
+			}
+		}
+
 	}
 
 	return nil

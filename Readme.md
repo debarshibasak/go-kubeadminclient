@@ -87,6 +87,12 @@ please create a github issue.
 - cli for creating cluster
 - More structure approach towards CNI, pod cidrs, service cidrs, dns domains etc.
 
+OS / Version | -- | --
+------------ | -------------| -------------
+Ubuntu |Centos| Redhat
+ + 18.04 | ! 7.x| n/a
+ + 16.04 | ! 8.x| 
+
 #### Roadmap
 - Testing this orchestration on centos, redhat
 - Add Support for remove node
@@ -95,6 +101,7 @@ please create a github issue.
 - Add docker daemon options like insecure registries etc.
 - Add option to install docker-ee
 - Add Support for offline installation
+- Add Support for waiting till nodes are ready
 
 #### Supporting this project
 - I need funding for testing this project

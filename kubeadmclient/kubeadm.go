@@ -73,7 +73,7 @@ func (k *Kubeadm) validateAndUpdateDefault() error {
 	return nil
 }
 
-func (k *Kubeadm) workerErrorManager(errc chan *workerError) error {
+func (k *Kubeadm) workerErrorManager(errc chan workerError) error {
 	for errWorker := range errc {
 		if errWorker.err != nil {
 			if errWorker.err == errWhileAddWorker {

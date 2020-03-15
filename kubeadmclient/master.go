@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/pkg/errors"
+	"errors"
 
 	"github.com/debarshibasak/go-kubeadmclient/sshclient"
 	"github.com/google/uuid"
@@ -37,7 +37,7 @@ func (n *MasterNode) getAllWorkerNodeNames() ([]string, error) {
 
 	for _, hostname := range strings.Split(strings.TrimSpace(out), "\n") {
 		trueHostName := strings.TrimSpace(strings.Split(hostname, " ")[0])
-		if trueHostName != "NAME" {
+		if trueHostName != "NAME" && trueHostName != "" {
 			hostnames = append(hostnames, trueHostName)
 		}
 	}
@@ -110,12 +110,12 @@ func (n *MasterNode) getAllMasterNodeNames() ([]string, error) {
 
 	for _, hostname := range strings.Split(strings.TrimSpace(out), "\n") {
 		trueHostName := strings.TrimSpace(strings.Split(hostname, " ")[0])
-		if trueHostName != "NAME" {
+		if trueHostName != "NAME" && trueHostName != "" {
 			hostnames = append(hostnames, trueHostName)
 		}
 	}
 
-	return nil, nil
+	return hostnames, nil
 }
 
 func (n *MasterNode) getJoinCommand() (string, error) {
@@ -173,6 +173,10 @@ func (n *MasterNode) install(kubeadm Kubeadm, availability *highAvailability) er
 
 func (n *MasterNode) deleteNode(hostname string) error {
 	return n.ctlCommand("kubectl delete node " + hostname)
+}
+
+func (n *MasterNode) reset() error {
+	return n.ctlCommand("kubeadm reset -f")
 }
 
 func getControlPlaneJoinCommand(data string) string {
