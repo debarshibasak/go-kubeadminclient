@@ -15,21 +15,14 @@ func (k *Kubeadm) DeleteCluster() error {
 		return err
 	}
 
-	if k.ResetOnDeleteCluster && len(k.WorkerNodes) < len(nodelist) {
-		return errors.New("will not be able to reset nodes as the nodelist is greater than worker nodes. This hints that some node details are missing")
-	}
-
 	masterNodeList, err := k.MasterNodes[0].getAllMasterNodeNames()
 	if err != nil {
 		return err
 	}
 
-	if k.ResetOnDeleteCluster && len(k.MasterNodes) < len(masterNodeList) {
-		return errors.New("will not be able to reset nodes as the nodelist is greater than master nodes. This hints that some node details are missing")
-	}
-
-	if len(masterNodeList) == 0 && len(nodelist) == 0 {
-		return errors.New("looks like an empty cluster")
+	err = k.validateDeleteCluster(nodelist, masterNodeList)
+	if err != nil {
+		return err
 	}
 
 	if k.ResetOnDeleteCluster {
@@ -61,5 +54,18 @@ func (k *Kubeadm) DeleteCluster() error {
 		}
 	}
 
+	return nil
+}
+
+func (k *Kubeadm) validateDeleteCluster(nodelist []string, masterNodeList []string) error {
+	if k.ResetOnDeleteCluster && len(k.WorkerNodes) < len(nodelist) {
+		return errors.New("will not be able to reset nodes as the nodelist is greater than worker nodes. This hints that some node details are missing")
+	}
+	if k.ResetOnDeleteCluster && len(k.MasterNodes) < len(masterNodeList) {
+		return errors.New("will not be able to reset nodes as the nodelist is greater than master nodes. This hints that some node details are missing")
+	}
+	if len(masterNodeList) == 0 && len(nodelist) == 0 {
+		return errors.New("looks like an empty cluster")
+	}
 	return nil
 }
