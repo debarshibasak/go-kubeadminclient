@@ -28,7 +28,7 @@ type Kubeadm struct {
 	ServiceNetwork       string
 	DNSDomain            string
 	VerboseMode          bool
-	Netorking            *networking.Networking
+	Networking           *networking.Networking
 	SkipWorkerFailure    bool
 	ResetOnDeleteCluster bool
 }

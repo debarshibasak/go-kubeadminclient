@@ -38,7 +38,7 @@ func TestKubeadm_CreateClusterHA(t *testing.T) {
 				"/Users/debarshibasak/.ssh/id_rsa",
 			),
 		},
-		Netorking:   networking.Flannel,
+		Networking:  networking.Flannel,
 		VerboseMode: false,
 	}
 
@@ -73,7 +73,7 @@ func TestKubeadm_CreateCluster(t *testing.T) {
 				"/Users/debarshibasak/.ssh/id_rsa",
 			),
 		},
-		Netorking:   networking.Flannel,
+		Networking:  networking.Flannel,
 		VerboseMode: false,
 	}
 

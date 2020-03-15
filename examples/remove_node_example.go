@@ -37,7 +37,7 @@ func RemoveNodeExample() {
 		},
 
 		SkipWorkerFailure: false,
-		Netorking:         networking.Flannel,
+		Networking:        networking.Flannel,
 	}
 
 	if err := k.RemoveNode(); err != nil {

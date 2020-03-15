@@ -34,7 +34,7 @@ func CreateClusterExampleNonHA() {
 				"/Users//.ssh/id_rsa",
 			),
 		},
-		Netorking:   networking.Flannel,
+		Networking:  networking.Flannel,
 		VerboseMode: false,
 	}
 
@@ -84,7 +84,7 @@ func CreateClusterExampleHA() {
 				"/Users//.ssh/id_rsa",
 			),
 		},
-		Netorking:   networking.Flannel,
+		Networking:  networking.Flannel,
 		VerboseMode: false,
 	}
 

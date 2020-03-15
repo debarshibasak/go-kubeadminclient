@@ -27,7 +27,7 @@ func TestKubeadm_RemoveNode(t *testing.T) {
 		},
 
 		SkipWorkerFailure: false,
-		Netorking:         networking.Flannel,
+		Networking:        networking.Flannel,
 	}
 
 	if err := k.RemoveNode(); err != nil {

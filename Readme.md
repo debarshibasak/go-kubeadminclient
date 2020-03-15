@@ -4,9 +4,10 @@
 
 Golang SDK for creating kubernetes clusters. Operations that are currently supported are -
 
-- Create Cluster
+- Create cluster
 - Add nodes
 - Remove nodes
+- Delete cluster
  
 The library automatically detects the operating system 
 and then perform the operation for that particular os.
